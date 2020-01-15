@@ -15,6 +15,7 @@ input1 = input_['input1']
 input2 = input_['input2']
 input3 = input_['input3']
 
+#aaaa
 class func:
     def txt(self, name):
         with open(f'txt/{name}.txt', 'r') as tmp:
