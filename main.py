@@ -133,7 +133,6 @@ def main():
                     break
         elif c == 2:
             logindata = user.login()
-            print(logindata)
             if logindata != 0:
                 break
         elif c == 3:
