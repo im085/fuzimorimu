@@ -9,12 +9,12 @@ data = kamoku['data']
 
 userdata = openpyxl.load_workbook('excel/userdata.xlsx')
 userlist = userdata['userlist']
-
+"""
 input_ = openpyxl.load_workbook('copy/input.xlsx')
 input1 = input_['input1']
 input2 = input_['input2']
 input3 = input_['input3']
-
+"""
 class func:
     def txt(self, name):
         with open(f'txt/{name}.txt', 'r') as tmp:
@@ -25,6 +25,7 @@ class func:
         userdata.save('excel/userdata.xlsx')
 func = func()
 
+#ユーザーの新規登録
 class user:
     def new(self):
         i = 2
@@ -45,6 +46,7 @@ class user:
         shutil.copytree('./copy', './data/'+f'{username}')
         return 1
 
+    #ログイン
     def login(self):
         i = 2
         print('ユーザーネームを入力してください: ', end="")
@@ -57,6 +59,7 @@ class user:
         print('ERROR: ユーザーネームかパスワードが間違っています')
         return 0
 
+    #ユーザーデータの削除
     def delete(self):
         i = 2
         print('削除したいアカウントのユーザーネームを入力してください: ', end="")
@@ -86,28 +89,22 @@ class user:
         print('一致するデータがありませんでした、スタートメニューに戻ります')
         return 2
 
-    def main(self):
-        return 0
+    #コースの入力
+    def corse(self, input1, inputsave):
+        while(True):
+            print('コースを入力してください')
+            for i in range(1,5):
+                print(input1[f'd{i}'].value, input1[f'e{i}'].value)
+            input1['b1'].value = int(input())
+            for i in range(0,4):
+                if input1['b1'].value == i:
+                    inputsave()
+                    return i
+            input1['b1'].value = None
+            print('ERROR：もう一度入力してください')
 user = user()
 
-def corse():
-    #コースの入力
-    while(True):
-        print('コースを入力してください')
-        for i in range(1,5):
-            print(input1[f'd{i}'].value,input1[f'e{i}'].value)
-        input1['b1'].value = int(input())
-        for i in range(0,4):
-            if input1['b1'].value == i:
-                return i
-        input1['b1'].value = None
-        print('ERROR：もう一度入力してください')
-        print('')
-
-class Calc:
-    def __init__(self, name):
-        self.name = self
-    
+class calc:
     def gpa(self):
         return 0
 
@@ -119,6 +116,7 @@ class Calc:
 
     def graduate(self):
         return 0
+calc = calc()
 
 def reset():
     pass
@@ -134,6 +132,16 @@ def main():
         elif c == 2:
             logindata = user.login()
             if logindata != 0:
+                #ユーザーデータの読み込み
+                input_ = openpyxl.load_workbook(f'./data/{logindata[1]}/input.xlsx')
+                input1 = input_['input1']
+                input2 = input_['input2']
+                input3 = input_['input3']
+                def inputsave():
+                    input_.save(f'./data/{logindata[1]}/input.xlsx')
+
+                #ここにログイン後の操作を記述予定
+
                 break
         elif c == 3:
             while('True'):
