@@ -142,9 +142,10 @@ def main():
                 input3 = input_['input3']
                 def inputsave():    #保存用関数（引数として使う）
                     input_.save(f'./data/{logindata[1]}/input.xlsx')
-
+                print(f'ようこそ {logindata[1]} さん')
                 #ここにログイン後の操作を記述予定
-
+                func.txt('after_login')
+                c = int(input())
                 break
         elif c == 3:
             while('True'):
