@@ -1,7 +1,6 @@
-import openpyxl
-import shutil
-from getpass import getpass
-import codecs
+import openpyxl #エクセル操作
+import shutil #フォルダ操作
+from getpass import getpass #パスワード取得
 
 #エクセルとの紐付け
 kamoku = openpyxl.load_workbook('excel/kamoku.xlsx')
@@ -9,24 +8,26 @@ data = kamoku['data']
 
 userdata = openpyxl.load_workbook('excel/userdata.xlsx')
 userlist = userdata['userlist']
-"""
-input_ = openpyxl.load_workbook('copy/input.xlsx')
-input1 = input_['input1']
-input2 = input_['input2']
-input3 = input_['input3']
-"""
+
+#基本機能
 class func:
+
+    #テキストの表示
     def txt(self, name):
         with open(f'txt/{name}.txt', 'r') as tmp:
             print(tmp.read(), end='')
 
+    #excel/userdata.xlsx内のuserlistに保存
     def add_userlist(self, data, col, row):
         userlist[f'{col}{row}'] = data
         userdata.save('excel/userdata.xlsx')
+
 func = func()
 
-#ユーザーの新規登録
+#ユーザーデータに関わる機能
 class user:
+
+    #ユーザーの新規登録
     def new(self):
         i = 2
         print('希望するユーザーネームを入力してください: ', end="")
@@ -102,6 +103,7 @@ class user:
                     return i
             input1['b1'].value = None
             print('ERROR：もう一度入力してください')
+
 user = user()
 
 class calc:
@@ -116,6 +118,7 @@ class calc:
 
     def graduate(self):
         return 0
+
 calc = calc()
 
 def reset():
@@ -137,7 +140,7 @@ def main():
                 input1 = input_['input1']
                 input2 = input_['input2']
                 input3 = input_['input3']
-                def inputsave():
+                def inputsave():    #保存用関数（引数として使う）
                     input_.save(f'./data/{logindata[1]}/input.xlsx')
 
                 #ここにログイン後の操作を記述予定
