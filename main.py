@@ -90,24 +90,59 @@ class user:
         print('一致するデータがありませんでした、スタートメニューに戻ります')
         return 2
 
-    #コースと学年の入力
+    #コースの入力
     def corse(self, input1, inputsave):
         while(True):
             print('コースを入力してください')
             for i in range(1,5):
-                print(input1[f'd{i}'].value, input1[f'e{i}'].value)
+                print(input1[f'd{i}'].value + ':' + input1[f'e{i}'].value)
             input1['b1'].value = int(input())
             for i in range(0,4):
                 if input1['b1'].value == i:
                     inputsave()
-                    print('学年を入力してください')
-                    input1['b2'].value = int(input())
-                    if input1['b2'].value in {1, 2, 3, 4}:
-                        inputsave()
-                        print('COMPLETED: 正常に登録されました')
-                        return 0
+                    print('COMPLETED: 正常に登録されました')
+                    return 0
             input1['b1'].value = None
             print('ERROR：もう一度最初から入力してください')
+
+    #コースの表示
+    def corse_show(self, input1):
+        for i in range(1, 5):
+            if input1[f'b1'].value == input1[f'd{i}'].value:
+                return input1[f'e{i}'].value
+
+    #学年の入力
+    def grade(self, input1, inputsave):
+        while(True):
+            print('学年を入力してください')
+            input1['b2'].value = int(input())
+            if input1['b2'].value in {1, 2, 3, 4}:
+                inputsave()
+                print('COMPLETED: 正常に登録されました')
+                return 0
+            input1['b1'].value = None
+            print('ERROR：もう一度最初から入力してください')
+
+    #学年の表示
+    def grade_show(self, input1):
+        if int(input1['b2'].value) in {1,2,3,4}:
+            return int(input1['b2'].value)
+        return 0
+    
+    #教職の入力
+    def tp(self, input1, inputsave):
+        print('受けているものには1、そうでないものには0を入力してください')
+        for i in range(3, 8):
+            print(input1[f'a{i}'].value + ':', end="")
+            while(True):
+                input1[f'b{i}'].value = int(input())
+                if input1[f'b{i}'].value in {0, 1}:
+                    break
+                print('ERROR：もう一度入力し直してください')
+        print('COMPLETED: 正常に登録されました')
+        return 0
+                
+
 user = user()
 
 class calc:
@@ -136,36 +171,66 @@ def reset():
 def main():
     while(True):
         func.txt('start')
-        c = int(input())
-        if c == 1:
-            while('True'):
-                if user.new() == 1:
+        c1 = int(input())
+        if c1 in {1, 2, 3, 4}:
+            #1: アカウント新規作成
+            if c1 == 1:
+                while(True):
+                    if user.new() == 1:
+                        break
+            #2: ログイン
+            elif c1 == 2:
+                logindata = user.login()
+                if logindata != 0:
+                    #ユーザーデータの読み込み
+                    input_ = openpyxl.load_workbook(f'./data/{logindata[1]}/input.xlsx')
+                    input1 = input_['input1']
+                    input2 = input_['input2']
+                    input3 = input_['input3']
+                    input4 = input_['input4']
+                    def inputsave():    #保存用関数（引数として使う）
+                        input_.save(f'./data/{logindata[1]}/input.xlsx')
+                    print(f'ようこそ {logindata[1]} さん')
+                    #ここにログイン後の操作を記述予定
+                    while(True):
+                        func.txt('after_login')
+                        c2 = int(input())
+                        if c2 in {1, 2, 3, 4, 5, 6}:
+                            #1: ユーザー情報・成績確認
+                            if c2 == 1:
+                                print('ユーザーネーム: '+f'{logindata[1]}')
+                                print('コース: ')
+                                pass
+                            #2: アカウント情報変更
+                            elif c2 == 2:
+                                pass
+                            #3: 理学部科目入力
+                            elif c2 == 3:
+                                pass
+                            #4: 教職科目入力
+                            elif c2 == 4:
+                                pass
+                            #5: その他の科目入力
+                            elif c2 == 5:
+                                pass
+                            #
+                            elif c2 == 6:
+                                print('ログアウトしました。')
+                                break
+                        else:
+                            print('ERROR: もう一度入力し直してください')
+                    #print(calc.gpa(input3, data))
+                    #user.corse(input1, inputsave)
                     break
-        elif c == 2:
-            logindata = user.login()
-            if logindata != 0:
-                #ユーザーデータの読み込み
-                input_ = openpyxl.load_workbook(f'./data/{logindata[1]}/input.xlsx')
-                input1 = input_['input1']
-                input2 = input_['input2']
-                input3 = input_['input3']
-                input4 = input_['input4']
-                def inputsave():    #保存用関数（引数として使う）
-                    input_.save(f'./data/{logindata[1]}/input.xlsx')
-                print(f'ようこそ {logindata[1]} さん')
-                #ここにログイン後の操作を記述予定
-                #func.txt('after_login')
-                #c = int(input())
-                #print(calc.gpa(input3, data))
-                user.corse(input1, inputsave)
+            #3: アカウント削除
+            elif c1 == 3:
+                while('True'):
+                    if user.delete() >= 1:
+                        break
+            #4: 終了する
+            elif c1 == 4:
+                print('**終了**')
                 break
-        elif c == 3:
-            while('True'):
-                if user.delete() >= 1:
-                    break
-        elif c == 4:
-            print('**終了**')
-            break
         else:
             print('ERROR: もう一度入力し直してください')
 
