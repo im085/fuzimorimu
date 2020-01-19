@@ -21,7 +21,7 @@ class func:
     #excel/userdata.xlsx内のuserlistに保存
     def add_userlist(self, data, col, row):
         userlist[f'{col}{row}'] = data
-        userdata.save('excel/userdata.xlsx')
+        userdata.save('./userdata.xlsx')
 
 func = func()
 
@@ -96,7 +96,7 @@ class user:
         while(True):
             print('コースを入力してください')
             for i in range(1,5):
-                print(input1[f'd{i}'].value + ':' + input1[f'e{i}'].value)
+                print(input1[f'd{i}'].value,': ',input1[f'e{i}'].value)
             input1['b1'].value = int(input())
             for i in range(0,4):
                 if input1['b1'].value == i:
@@ -126,7 +126,7 @@ class user:
 
     #学年の表示
     def grade_show(self, input1):
-        return input1['b2'].value
+        return str(input1['b2'].value)
     
     #教職の入力
     def tp(self, input1, inputsave):
@@ -138,6 +138,7 @@ class user:
                 if input1[f'b{i}'].value in {0, 1}:
                     break
                 print('ERROR：もう一度入力し直してください')
+        inputsave()
         print('COMPLETED: 正常に登録されました')
 
     #教職の表示
@@ -149,6 +150,7 @@ class user:
                 c = c + 1
         if c == 0:
             print('なし')
+        print('')
 user = user()
 
 class calc:
@@ -252,7 +254,7 @@ class calc:
         #教養特別講義
         sum1 = 0
         for i in range(2,5):
-            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'p{i}'].value + input4[f'c{i}'].value*tmp)
+            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)
         if sum1 != 2:
             return 0
         #外国語
@@ -361,7 +363,9 @@ class calc:
         return 0
 
     #教職科目の判定
-    def tp_all(self, input4, tmp):
+    #modeの対応は1~5の順で数学中、数学高、情報、理科中、理科高
+    #法律で定められた科目
+    def tp_1(self, input4, tmp):
         #プレゼンテーションイングリッシュb
         sum_ = 0
         for i in {6, 9}:
@@ -384,25 +388,71 @@ class calc:
             return 0    
         return 1
 
-    def tp_calc(self, input2, input3, input4, tmp, mode):
-        if mode == 1:
-            #数学中
-            pass
-        elif mode == 2:
-            #数学高
-            pass
-        elif mode == 3:
-            #情報
-            pass
-        elif mode == 4:
-            #理科中
-            pass
-        elif mode == 5:
-            #理科高
-            pass
-        else:
-            return 0
+    #教職に関する科目
+    def tp_2(self, input3, tmp, mode):
+        mode_dict = {
+            1: 'd',
+            2: 'e',
+            3: 'f',
+            4: 'g',
+            5: 'h'
+        }
+        sum_ = 0
+        for i in range(2, 23):
+            sum_ = sum_ + data_t[f'c{i}'].value * data_t[f'{mode_dict[mode]}{i}'] * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'c{i}'].value*tmp)
+        if mode in {1, 4}:
+            if sum_ < 31:
+                return 0
+        elif mode in {2, 3, 5}:
+            if sum_ < 27:
+                return 0
+        return 1
 
+    #教科に関する科目:
+    def tp_3(self, input2, tmp, mode):
+        mode_dict1_1 = {
+            1: 'x',
+            2: 'x',
+            3: 'z',
+            4: 'ab',
+            5: 'ab'
+        }
+        mode_dict1_2 = {
+            1: 'y',
+            2: 'y',
+            3: 'aa',
+            4: 'ac',
+            5: 'ac'
+        }
+        mode_dict2 = {
+            1: 28,
+            2: 32,
+            3: 34,
+            4: 28,
+            5: 32
+        }
+        sum_ = 0
+        for i in range(2, 166):
+            sum_ = sum_ + data[f'c{i}'].value * data[f'{mode_dict1_1[mode]}{i}'] * data[f'{mode_dict1_2[mode]}{i}'] * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum_ < mode_dict2[mode]:
+            return 0
+        return 1
+
+    def tp_calc(self, input2, input3, input4, tmp):
+        mode_dict = {
+            1: '数学中',
+            2: '数学高',
+            3: '情報',
+            4: '理科中',
+            5: '理科高'
+        }
+        cnt = 0
+        for mode in range(1, 6):
+            if calc.tp_1(input4, tmp) == 1 and calc.tp_2(input3, tmp, mode) == 1 and calc.tp_3(input2, tmp, mode) == 1:
+                print(f'{mode_dict[mode]}の教職が取得できる予定です')
+                cnt = cnt + 1
+        if cnt == 0:
+            print('取得できる予定の教職はありません')
 calc = calc()
 
 def reset():
@@ -437,13 +487,13 @@ def main():
                         if c2 in {1, 2, 3, 4, 5, 6}:
                             #1: ユーザー情報・成績確認
                             if c2 == 1:
-                                print('ユーザーネーム: ' + f'{logindata[1]}')
-                                print('コース: ' + user.corse_show(input1))
-                                print('学年: ' + user.grade_show(input1))
-                                print('教職')
+                                print('ユーザーネーム:', f'{logindata[1]}')
+                                print('コース:', user.corse_show(input1))
+                                print('学年:', user.grade_show(input1))
+                                print('取得希望の教職')
                                 user.tp_show(input1)
-                                print('学科科目GPA: ' + calc.gpa(input2))
-                                print('GPA: ' + calc.gpaall(input2, input4))
+                                print('学科科目GPA:', calc.gpa(input2))
+                                print('GPA:', calc.gpaall(input2, input4))
                                 print('卒業研究(履修予定含む)')
                                 calc.labo(input1, input2, 1)
                                 print('卒業研究(履修予定含まない)')
@@ -451,13 +501,17 @@ def main():
                                 print('卒業判定(履修予定含む)')
                                 calc.graduate(input1, input2, input4, 1)
                                 print('卒業判定(履修予定含まない)')
-                                calc.graduate(input1, input2, input4, 0)         
+                                calc.graduate(input1, input2, input4, 0)
+                                print('教職判定(履修予定含む)')
+                                calc.tp_calc(input2, input3, input4, 1)
+                                print('教職判定(履修予定含まない)')
+                                calc.tp_calc(input2, input3, input4, 0)
                             #2: アカウント情報変更
                             elif c2 == 2:
                                 while(True):
                                     func.txt('account_info')
                                     c3 = int(input())
-                                    if c3 in {1, 2, 3}:
+                                    if c3 in {1, 2, 3, 4}:
                                         #1: コース
                                         if c3 == 1:
                                             user.corse(input1, inputsave)
@@ -467,6 +521,8 @@ def main():
                                         #3: 教職
                                         elif c3 == 3:
                                             user.tp(input1, inputsave)
+                                        elif c3 == 4:
+                                            break
                                     else:
                                         print('ERROR: もう一度入力し直してください')
                             #3: 理学部科目入力
@@ -484,7 +540,6 @@ def main():
                                 break
                         else:
                             print('ERROR: もう一度入力し直してください')
-                    break
             #3: アカウント削除
             elif c1 == 3:
                 while('True'):
