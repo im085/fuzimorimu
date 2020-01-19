@@ -3,10 +3,10 @@ import shutil #フォルダ操作
 from getpass import getpass #パスワード取得
 
 #エクセルとの紐付け
-kamoku = openpyxl.load_workbook('excel/kamoku.xlsx')
+kamoku = openpyxl.load_workbook('./kamoku.xlsx')
 data = kamoku['data']
 
-userdata = openpyxl.load_workbook('excel/userdata.xlsx')
+userdata = openpyxl.load_workbook('./userdata.xlsx')
 userlist = userdata['userlist']
 
 #基本機能
@@ -90,7 +90,7 @@ class user:
         print('一致するデータがありませんでした、スタートメニューに戻ります')
         return 2
 
-    #コースの入力
+    #コースと学年の入力
     def corse(self, input1, inputsave):
         while(True):
             print('コースを入力してください')
@@ -100,15 +100,24 @@ class user:
             for i in range(0,4):
                 if input1['b1'].value == i:
                     inputsave()
-                    return i
+                    print('学年を入力してください')
+                    input1['b2'].value = int(input())
+                    if input1['b2'].value in {1, 2, 3, 4}:
+                        inputsave()
+                        print('COMPLETED: 正常に登録されました')
+                        return 0
             input1['b1'].value = None
-            print('ERROR：もう一度入力してください')
-
+            print('ERROR：もう一度最初から入力してください')
 user = user()
 
 class calc:
-    def gpa(self):
-        return 0
+    def gpa(self, input3, data):
+        sum1 = 0
+        sum2 = 0
+        for i in range(2,166):
+            sum1 = sum1 + data[f'c{i}'].value * (input3[f'd{i}'].value*4 + input3[f'e{i}'].value*3 + input3[f'f{i}'].value*2 + input3[f'g{i}'].value*1)
+            sum2 = sum2 + data[f'c{i}'].value * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'h{i}'].value)
+        return float(sum1/sum2)
 
     def gpaall(self):
         return 0
@@ -140,12 +149,15 @@ def main():
                 input1 = input_['input1']
                 input2 = input_['input2']
                 input3 = input_['input3']
+                input4 = input_['input4']
                 def inputsave():    #保存用関数（引数として使う）
                     input_.save(f'./data/{logindata[1]}/input.xlsx')
                 print(f'ようこそ {logindata[1]} さん')
                 #ここにログイン後の操作を記述予定
-                func.txt('after_login')
-                c = int(input())
+                #func.txt('after_login')
+                #c = int(input())
+                #print(calc.gpa(input3, data))
+                user.corse(input1, inputsave)
                 break
         elif c == 3:
             while('True'):
