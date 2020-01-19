@@ -163,45 +163,163 @@ class calc:
         return float(sum1/sum2)
 
     #GPA
-    def gpaall(self, input2, input3, input4):
+    def gpaall(self, input2, input4):
         sum1 = 0
         sum2 = 0
         #input2の入力
         for i in range(2,166):
             sum1 = sum1 + data[f'c{i}'].value * (input2[f'd{i}'].value*4 + input2[f'e{i}'].value*3 + input2[f'f{i}'].value*2 + input2[f'g{i}'].value*1)
             sum2 = sum2 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'h{i}'].value)
-        #input3の入力
-        for i in range(2, 23):
-            sum1 = sum1 + data_t[f'c{i}'].value * (input3[f'd{i}'].value*4 + input3[f'e{i}'].value*3 + input3[f'f{i}'].value*2 + input3[f'g{i}'].value*1)
-            sum2 = sum2 + data_t[f'c{i}'].value * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'h{i}'].value)
         #input4の入力
         i = 2
         while(input4[f'b{i}'].value != None):
-            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value*4 + input4[f'e{i}'].value*3 + input4[f'f{i}'].value*2 + input4[f'g{i}'].value*1 + input4[f'i{i}'].value*4)
+            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value*4 + input4[f'e{i}'].value*3 + input4[f'f{i}'].value*2 + input4[f'g{i}'].value*1)
             sum2 = sum2 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'h{i}'].value + input4[f'i{i}'].value + input4[f'j{i}'].value)
             i = i + 1
         return float(sum1/sum2)
 
+    #以下は卒業研究判定。tmp=0...履修予定を含まない / tmp=1...履修予定を含む
     #卒業研究(1),(2)
-    def foundation(self, input2):
+    def foundation(self, input2, tmp):
         sum1 = 0
         for i in range(2,23):
-            sum1 = sum1 + data[f'j{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value)
+            sum1 = sum1 + data[f'j{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
         sum2 = 0
         for i in range(23,35):
-            sum1 = sum1 + data[f'k{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value)
-        if sum1 >= 16 and sum2 == 9.5 and (input2['d16'].value + input2['e16'].value + input2['f16'].value + input2['g16'].value) == 1:
+            sum1 = sum1 + data[f'k{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum1 >= 16 and sum2 == 9.5 and (input2['d16'].value + input2['e16'].value + input2['f16'].value + input2['g16'].value + input2['c16'].value*tmp) == 1:
             return 1
         else:
             return 0
 
-    #研究室に入れるか
-    def labo(self, input1, input2):
+    def labo_math(self, input2, tmp):
+        sum_ = 0
+        for i in range(2, 166):
+            sum_ = sum_ + data[f'l{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum_ >= 26:
+            return 1
+        else:
+            return 0
 
+    def labo_tech(self, input2, tmp):
+        sum1 = 0
+        for i in range(2, 166):
+            sum1 = sum1 + data[f'o{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum2 = 0
+        for i in range(2, 166):
+            sum2 = sum2 + data[f'p{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum1 == 6 and sum2 >= 20:
+            return 1
+        else:
+            return 0
+
+    #物理コース卒業研究
+    def labo_phys(self, input2, tmp):
+        sum1 = 0
+        for i in range(2, 166):
+            sum1 = sum1 + data[f'm{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum2 = 0
+        for i in range(2, 166):
+            sum2 = sum2 + data[f'n{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum1 == 4 and sum2 >= 22:
+            return 1
+        else:
+            return 0
+
+    #研究室に入れるかどうか
+    def labo(self, input1, input2, tmp):
+        c = input1['b1'].value
+        if c == 0:
+            print('コース未定なので算出できません')
+        elif c == 1:
+            if calc.foundation(input2, tmp) == 1 and calc.labo_math(input2 ,tmp) == 1:
+                print('数学コースの卒業研究が履修できます')
+                return 1
+        elif c == 2:
+            if calc.foundation(input2, tmp) == 1 and calc.labo_tech(input2, tmp) == 1:
+                print('情報コースの卒業研究が履修できます')
+                return 1
+        elif c == 3:
+            if calc.foundation(input2, tmp) == 1 and calc.labo_math(input2, tmp) == 1:
+                print('物理コースの卒業研究が履修できます')
+                return 1
+        print('卒業研究は履修できません')
         return 0
 
+    #以下は卒業判定。tmp=0...履修予定を含まない / tmp=1...履修予定を含む
+    #全コース共通科目
+    def graduate_all(self, input4, tmp):
+        #教養特別講義
+        #外国語
+        #情報処理
+        #身体運動
+        #教養科目
+        #その他科目
+        pass
+
+    #数学コース卒業判定
+    def graduate_math(self, input2, tmp):
+        sum1 = 0
+        for i in range(2, 166):
+            sum1 = sum1 + data[f'i{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum2 = 0
+        for i in range(23, 166):
+            sum2 = sum2 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if calc.foundation(input2, tmp) == 1 and calc.labo_math(input2 ,tmp) == 1 and sum1 >= 40 and sum2 - 40 >= 17.5:
+            return sum2 - (40 + 17.5)
+        else:
+            return 0
+
+    #情報コース卒業判定
+    def graduate_tech(self, input2, tmp):
+        sum1 = 0
+        for i in range(2, 166):
+            sum1 = sum1 + data[f'w{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum2 = 0
+        for i in range(2, 166):
+            sum2 = sum2 + data[f'h{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum3 = 0
+        for i in range(23, 166):
+            sum3 = sum3 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum1 >= 13 and sum2 - 13 >= 30 and sum3 - (13 + 30) >= 14.5 and calc.foundation(input2, tmp) == 1 and calc.labo_tech(input2, tmp) == 1:
+            return sum3 - (13 + 30 + 14.5)
+        else:
+            return 0
+
+    #物理コース卒業判定
+    def graduate_phys(self, input2, tmp):
+        sum1 = 0
+        for i in range(2, 166):
+            sum1 = sum1 + data[f'v{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum2 = 0
+        for i in range(2, 166):
+            sum2 = sum2 + data[f'g{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        sum3 = 0
+        for i in range(23, 166):
+            sum3 = sum3 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        if sum1 >= 23.5 and sum2 - 23.5 >= 20 and sum3 - (23.5 + 20) >= 14 and calc.foundation(input2, tmp) == 1 and calc.labo_phys(input2, tmp) == 1:
+            return sum3 - (23.5 + 20 + 14)
+        else:
+            return 0
+
     #卒業できるか
-    def graduate(self):
+    def graduate(self, input1, input2, tmp):
+        c = input1['b1'].value
+        if c == 0:
+            print('コース未定なので算出できません')
+        elif c == 1:
+            if calc.graduate_math(input2, tmp) == 1:
+                print('卒業できます(数学コース)')
+                return 1
+        elif c == 2:
+            if calc.graduate_tech(input2, tmp) == 1:
+                print('卒業できます(情報コース)')
+                return 1
+        elif c == 3:
+            if calc.graduate_phys(input2, tmp) == 1:
+                print('卒業できます(物理コース)')
+                return 1
+        print('卒業できません')
         return 0
 calc = calc()
 
@@ -240,27 +358,31 @@ def main():
                                 print('ユーザーネーム: ' + f'{logindata[1]}')
                                 print('コース: ' + user.corse_show(input1))
                                 print('学年: ' + user.grade_show(input1))
-                                print('教職:')
+                                print('教職')
                                 user.tp_show(input1)
                                 print('学科科目GPA: ' + calc.gpa(input2))
-                                print('GPA: ' + calc.gpaall(input2, input3, input4))
-                                print('卒業研究: ')
+                                print('GPA: ' + calc.gpaall(input2, input4))
+                                print('卒業研究(履修予定含む)')
+                                calc.labo(input1, input2, 1)
+                                print('卒業研究(履修予定含まない)')
+                                calc.labo(input1, input2, 0)
                             #2: アカウント情報変更
                             elif c2 == 2:
-                                func.txt('account_info')
-                                c3 = int(input())
-                                if c3 in {1, 2, 3}:
-                                    #1: コース
-                                    if c3 == 1:
-                                        user.corse(input1, inputsave)
-                                    #2: 学年
-                                    if c3 == 2:
-                                        user.grade(input1, inputsave)
-                                    #3: 教職
-                                    if c3 == 3:
-                                        user.tp(input1, inputsave)
-                                else:
-                                    print('ERROR: もう一度入力し直してください')
+                                while(True):
+                                    func.txt('account_info')
+                                    c3 = int(input())
+                                    if c3 in {1, 2, 3}:
+                                        #1: コース
+                                        if c3 == 1:
+                                            user.corse(input1, inputsave)
+                                        #2: 学年
+                                        elif c3 == 2:
+                                            user.grade(input1, inputsave)
+                                        #3: 教職
+                                        elif c3 == 3:
+                                            user.tp(input1, inputsave)
+                                    else:
+                                        print('ERROR: もう一度入力し直してください')
                             #3: 理学部科目入力
                             elif c2 == 3:
                                 pass
