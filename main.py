@@ -154,7 +154,7 @@ user = user()
 class calc:
     
     #学科GPA
-    def gpa(self, input2, data):
+    def gpa(self, input2):
         sum1 = 0
         sum2 = 0
         for i in range(2,166):
@@ -163,7 +163,7 @@ class calc:
         return float(sum1/sum2)
 
     #GPA
-    def gpaall(self, input2, input3, input4, data, data_t):
+    def gpaall(self, input2, input3, input4):
         sum1 = 0
         sum2 = 0
         #input2の入力
@@ -182,8 +182,22 @@ class calc:
             i = i + 1
         return float(sum1/sum2)
 
+    #卒業研究(1),(2)
+    def foundation(self, input2):
+        sum1 = 0
+        for i in range(2,23):
+            sum1 = sum1 + data[f'j{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value)
+        sum2 = 0
+        for i in range(23,35):
+            sum1 = sum1 + data[f'k{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value)
+        if sum1 >= 16 and sum2 == 9.5 and (input2['d16'].value + input2['e16'].value + input2['f16'].value + input2['g16'].value) == 1:
+            return 1
+        else:
+            return 0
+
     #研究室に入れるか
-    def labo(self):
+    def labo(self, input1, input2):
+
         return 0
 
     #卒業できるか
@@ -228,12 +242,25 @@ def main():
                                 print('学年: ' + user.grade_show(input1))
                                 print('教職:')
                                 user.tp_show(input1)
-                                print('学科科目GPA: ' + calc.gpa(input2, data))
-                                print('GPA: ' + calc.gpaall(input2, input3, input4, data, data_t))
-                                print('卒業研究')
+                                print('学科科目GPA: ' + calc.gpa(input2))
+                                print('GPA: ' + calc.gpaall(input2, input3, input4))
+                                print('卒業研究: ')
                             #2: アカウント情報変更
                             elif c2 == 2:
-                                pass
+                                func.txt('account_info')
+                                c3 = int(input())
+                                if c3 in {1, 2, 3}:
+                                    #1: コース
+                                    if c3 == 1:
+                                        user.corse(input1, inputsave)
+                                    #2: 学年
+                                    if c3 == 2:
+                                        user.grade(input1, inputsave)
+                                    #3: 教職
+                                    if c3 == 3:
+                                        user.tp(input1, inputsave)
+                                else:
+                                    print('ERROR: もう一度入力し直してください')
                             #3: 理学部科目入力
                             elif c2 == 3:
                                 pass
@@ -249,8 +276,6 @@ def main():
                                 break
                         else:
                             print('ERROR: もう一度入力し直してください')
-                    #print(calc.gpa(input3, data))
-                    #user.corse(input1, inputsave)
                     break
             #3: アカウント削除
             elif c1 == 3:
