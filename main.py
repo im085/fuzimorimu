@@ -250,12 +250,50 @@ class calc:
     #全コース共通科目
     def graduate_all(self, input4, tmp):
         #教養特別講義
+        sum1 = 0
+        for i in range(2,5):
+            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'p{i}'].value + input4[f'c{i}'].value*tmp)
+        if sum1 != 2:
+            return 0
         #外国語
+        sum1 = 0
+        for i in range(5,11):
+            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'c{i}'].value*tmp)
+        if sum1 != 12:
+            return 0
         #情報処理
+        sum1 = input4['b11'].value * (input4['d11'].value + input4['e11'].value + input4['f11'].value + input4['g11'].value + input4['c11'].value*tmp)
+        if sum1 != 2:
+            return 0
         #身体運動
-        #教養科目
-        #その他科目
-        pass
+        for i in range(12,15):
+            sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'c{i}'].value*tmp)
+        if sum1 != 2:
+            return 0
+        #教養科目/その他科目
+        sum1 = 0 #教養科目の単位数
+        sum2 = 0 #その他科目の単位数
+        i = 15
+        cnt_a = 0 #教養Aのカウント
+        cnt_b = 0 #教養Bのカウント
+        cnt_c = 0 #教養Cのカウント
+        while input4[f'a{i}'].value != None:
+            if input4[f'l{i}'].value == 1:
+                cnt_a = cnt_a + 1 
+                sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'c{i}'].value*tmp)                
+            elif input4[f'm{i}'].value == 1:
+                cnt_b = cnt_b + 1
+                sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'c{i}'].value*tmp)                
+            elif input4[f'n{i}'].value == 1:
+                cnt_c = cnt_c + 1
+                sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'c{i}'].value*tmp)                
+            else:
+                sum2 = sum2 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
+            i = i + 1
+        if cnt_a == 0 or cnt_b == 0 or cnt_c == 0 or sum1 < 12:
+            return 0
+        else:
+            return sum1 + sum2 - 12
 
     #数学コース卒業判定
     def graduate_math(self, input2, tmp):
@@ -303,24 +341,68 @@ class calc:
             return 0
 
     #卒業できるか
-    def graduate(self, input1, input2, tmp):
+    def graduate(self, input1, input2, input4, tmp):
         c = input1['b1'].value
         if c == 0:
             print('コース未定なので算出できません')
         elif c == 1:
-            if calc.graduate_math(input2, tmp) == 1:
+            if calc.graduate_all(input4, tmp) + calc.graduate_math(input2, tmp) >= 5:
                 print('卒業できます(数学コース)')
                 return 1
         elif c == 2:
-            if calc.graduate_tech(input2, tmp) == 1:
+            if calc.graduate_all(input4, tmp) + calc.graduate_tech(input2, tmp) >= 5:
                 print('卒業できます(情報コース)')
                 return 1
         elif c == 3:
-            if calc.graduate_phys(input2, tmp) == 1:
+            if calc.graduate_all(input4, tmp) + calc.graduate_phys(input2, tmp) >= 5:
                 print('卒業できます(物理コース)')
                 return 1
         print('卒業できません')
         return 0
+
+    #教職科目の判定
+    def tp_all(self, input4, tmp):
+        #プレゼンテーションイングリッシュb
+        sum_ = 0
+        for i in {6, 9}:
+            sum_ = sum_ + input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
+        if sum_ < 2:
+            return 0
+        #身体運動
+        sum_ = 0
+        for i in range(12, 15):
+            sum_ = sum_ + input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
+        if sum_ < 2:
+            return 0            
+        #基礎情報処理
+        i = 11
+        if input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
+            return 0    
+        #日本国憲法
+        i = 15
+        if input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
+            return 0    
+        return 1
+
+    def tp_calc(self, input2, input3, input4, tmp, mode):
+        if mode == 1:
+            #数学中
+            pass
+        elif mode == 2:
+            #数学高
+            pass
+        elif mode == 3:
+            #情報
+            pass
+        elif mode == 4:
+            #理科中
+            pass
+        elif mode == 5:
+            #理科高
+            pass
+        else:
+            return 0
+
 calc = calc()
 
 def reset():
@@ -366,6 +448,10 @@ def main():
                                 calc.labo(input1, input2, 1)
                                 print('卒業研究(履修予定含まない)')
                                 calc.labo(input1, input2, 0)
+                                print('卒業判定(履修予定含む)')
+                                calc.graduate(input1, input2, input4, 1)
+                                print('卒業判定(履修予定含まない)')
+                                calc.graduate(input1, input2, input4, 0)         
                             #2: アカウント情報変更
                             elif c2 == 2:
                                 while(True):
