@@ -15,7 +15,7 @@ class func:
 
     #テキストの表示
     def txt(self, name):
-        with open(f'txt/{name}.txt', 'r', encodeing = 'utf-8') as tmp:
+        with open(f'txt/{name}.txt', 'r', encoding = 'utf-8') as tmp:
             print(tmp.read(), end='')
 
     #excel/userdata.xlsx内のuserlistに保存
