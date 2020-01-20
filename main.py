@@ -15,7 +15,7 @@ class func:
 
     #テキストの表示
     def txt(self, name):
-        with open(f'txt/{name}.txt', 'r') as tmp:
+        with open(f'txt/{name}.txt', 'r', encodeing = 'utf-8') as tmp:
             print(tmp.read(), end='')
 
     #excel/userdata.xlsx内のuserlistに保存
@@ -162,6 +162,8 @@ class calc:
         for i in range(2,166):
             sum1 = sum1 + data[f'c{i}'].value * (input2[f'd{i}'].value*4 + input2[f'e{i}'].value*3 + input2[f'f{i}'].value*2 + input2[f'g{i}'].value*1)
             sum2 = sum2 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'h{i}'].value)
+        if sum2 == 0:
+            return 0
         return float(sum1/sum2)
 
     #GPA
@@ -182,6 +184,8 @@ class calc:
             sum1 = sum1 + input4[f'b{i}'].value * (input4[f'd{i}'].value*4 + input4[f'e{i}'].value*3 + input4[f'f{i}'].value*2 + input4[f'g{i}'].value*1)
             sum2 = sum2 + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'h{i}'].value + input4[f'i{i}'].value + input4[f'j{i}'].value)
             i = i + 1
+        if sum2 == 0:
+            return 0
         return float(sum1/sum2)
 
     #以下は卒業研究判定。tmp=0...履修予定を含まない / tmp=1...履修予定を含む
@@ -484,7 +488,6 @@ def main():
                     def inputsave():    #保存用関数（引数として使う）
                         input_.save(f'./data/{logindata[1]}/input.xlsx')
                     print(f'ようこそ {logindata[1]} さん')
-                    print(calc.tp_3(input2, 1, 3))
                     while(True):
                         func.txt('after_login')
                         c2 = int(input())
