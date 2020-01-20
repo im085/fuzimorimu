@@ -191,8 +191,8 @@ class calc:
         for i in range(2,23):
             sum1 = sum1 + data[f'j{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
         sum2 = 0
-        for i in range(23,35):
-            sum1 = sum1 + data[f'k{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+        for i in range(2,166):
+            sum2 = sum2 + data[f'k{i}'].value * data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
         if sum1 >= 16 and sum2 == 9.5 and (input2['d16'].value + input2['e16'].value + input2['f16'].value + input2['g16'].value + input2['c16'].value*tmp) == 1:
             return 1
         else:
@@ -373,22 +373,22 @@ class calc:
         #プレゼンテーションイングリッシュb
         sum_ = 0
         for i in {6, 9}:
-            sum_ = sum_ + input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
+            sum_ = sum_ + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
         if sum_ < 2:
             return 0
         #身体運動
         sum_ = 0
         for i in range(12, 15):
-            sum_ = sum_ + input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
+            sum_ = sum_ + input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp)                
         if sum_ < 2:
             return 0            
         #基礎情報処理
         i = 11
-        if input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
+        if input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
             return 0    
         #日本国憲法
         i = 15
-        if input4[f'b{i}'].value * input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
+        if input4[f'b{i}'].value * (input4[f'd{i}'].value + input4[f'e{i}'].value + input4[f'f{i}'].value + input4[f'g{i}'].value + input4[f'i{i}'].value + input4[f'c{i}'].value*tmp) != 2:
             return 0    
         return 1
 
@@ -403,7 +403,7 @@ class calc:
         }
         sum_ = 0
         for i in range(2, 23):
-            sum_ = sum_ + data_t[f'c{i}'].value * data_t[f'{mode_dict[mode]}{i}'] * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'c{i}'].value*tmp)
+            sum_ = sum_ + data_t[f'c{i}'].value * data_t[f'{mode_dict[mode]}{i}'].value * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'c{i}'].value*tmp)
         if mode in {1, 4}:
             if sum_ < 31:
                 return 0
@@ -437,7 +437,9 @@ class calc:
         }
         sum_ = 0
         for i in range(2, 166):
-            sum_ = sum_ + data[f'c{i}'].value * data[f'{mode_dict1_1[mode]}{i}'] * data[f'{mode_dict1_2[mode]}{i}'] * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+            sum_ = sum_ + data[f'c{i}'].value * data[f'{mode_dict1_1[mode]}{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+            sum_ = sum_ + data[f'c{i}'].value * data[f'{mode_dict1_2[mode]}{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'c{i}'].value*tmp)
+            print
         if sum_ < mode_dict2[mode]:
             return 0
         return 1
@@ -482,6 +484,7 @@ def main():
                     def inputsave():    #保存用関数（引数として使う）
                         input_.save(f'./data/{logindata[1]}/input.xlsx')
                     print(f'ようこそ {logindata[1]} さん')
+                    print(calc.tp_3(input2, 1, 3))
                     while(True):
                         func.txt('after_login')
                         c2 = int(input())
@@ -491,7 +494,7 @@ def main():
                                 print('ユーザーネーム:', f'{logindata[1]}')
                                 print('コース:', user.corse_show(input1))
                                 print('学年:', user.grade_show(input1))
-                                print('取得希望の教職')
+                                print('取得希望の教職:')
                                 user.tp_show(input1)
                                 print('学科科目GPA:', calc.gpa(input2))
                                 print('GPA:', calc.gpaall(input2, input3, input4))
