@@ -165,13 +165,17 @@ class calc:
         return float(sum1/sum2)
 
     #GPA
-    def gpaall(self, input2, input4):
+    def gpaall(self, input2, input3, input4):
         sum1 = 0
         sum2 = 0
         #input2の入力
         for i in range(2,166):
             sum1 = sum1 + data[f'c{i}'].value * (input2[f'd{i}'].value*4 + input2[f'e{i}'].value*3 + input2[f'f{i}'].value*2 + input2[f'g{i}'].value*1)
             sum2 = sum2 + data[f'c{i}'].value * (input2[f'd{i}'].value + input2[f'e{i}'].value + input2[f'f{i}'].value + input2[f'g{i}'].value + input2[f'h{i}'].value)
+        #input3の入力
+        for i in range(2, 23):
+            sum1 = sum1 + data_t[f'c{i}'].value * (input3[f'd{i}'].value*4 + input3[f'e{i}'].value*3 + input3[f'f{i}'].value*2 + input3[f'g{i}'].value*1)
+            sum2 = sum2 + data_t[f'c{i}'].value * (input3[f'd{i}'].value + input3[f'e{i}'].value + input3[f'f{i}'].value + input3[f'g{i}'].value + input3[f'h{i}'].value)
         #input4の入力
         i = 2
         while(input4[f'b{i}'].value != None):
@@ -455,9 +459,6 @@ class calc:
             print('取得できる予定の教職はありません')
 calc = calc()
 
-def reset():
-    pass
-
 def main():
     while(True):
         func.txt('start')
@@ -484,7 +485,7 @@ def main():
                     while(True):
                         func.txt('after_login')
                         c2 = int(input())
-                        if c2 in {1, 2, 3, 4, 5, 6}:
+                        if c2 in {1, 2, 3}:
                             #1: ユーザー情報・成績確認
                             if c2 == 1:
                                 print('ユーザーネーム:', f'{logindata[1]}')
@@ -493,7 +494,7 @@ def main():
                                 print('取得希望の教職')
                                 user.tp_show(input1)
                                 print('学科科目GPA:', calc.gpa(input2))
-                                print('GPA:', calc.gpaall(input2, input4))
+                                print('GPA:', calc.gpaall(input2, input3, input4))
                                 print('卒業研究(履修予定含む)')
                                 calc.labo(input1, input2, 1)
                                 print('卒業研究(履修予定含まない)')
@@ -525,17 +526,8 @@ def main():
                                             break
                                     else:
                                         print('ERROR: もう一度入力し直してください')
-                            #3: 理学部科目入力
+                            #3: ログアウト
                             elif c2 == 3:
-                                pass
-                            #4: 教職科目入力
-                            elif c2 == 4:
-                                pass
-                            #5: その他の科目入力
-                            elif c2 == 5:
-                                pass
-                            #6: ログアウト
-                            elif c2 == 6:
                                 print('ログアウトしました。')
                                 break
                         else:
